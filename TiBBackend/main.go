@@ -1,16 +1,14 @@
 package main
 
 import (
+	"TiBBackend/config"
+	"TiBBackend/routes"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 func main() {
+	config.InitDB()
 	r := gin.Default()
-
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"message": "pong"})
-	})
-
+	routes.SetupRoutes(r)
 	r.Run(":8080") // listen and serve on localhost:8080
 }
