@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+
     <el-card class="login-card" v-if="isLogin">
       <h2>Login</h2>
       <el-form :model="form" ref="form" label-width="100px" @submit.prevent="login">

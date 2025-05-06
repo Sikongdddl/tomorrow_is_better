@@ -1,12 +1,18 @@
 <template>
+  <div class="header">
+    <h1>欢迎！</h1>
+    <el-button type="primary" @click="goToProfile" style="float: right;">个人主页</el-button>
+  </div>
   <div class="topics-container">
     <el-card class="topic-card" v-for="topic in topics" :key="topic.ID">
       <h3>{{ topic.Title }}</h3>
       <p>Event Time: {{ new Date(topic.EventTime).toLocaleString() }}</p>
       <p>Location: {{ topic.Location }}</p>
+      <p>
+        Participant List:
+      </p>
       <p v-for = "participant in topic.Participants" :key="participant.ID">
-        UserID: {{participant.UserID}}
-        Role: {{participant.Role}}
+        {{participant.Role}}:   {{userMap[participant.UserID]}}
       </p>
       <el-button type="success" @click="join(topic.ID)">Join</el-button>
     </el-card>
@@ -33,6 +39,7 @@
 
 <script>
 import { fetchTopics, createTopic, joinTopic } from '@/services/topicService';
+import { getNameById} from "@/services/userService";
 
 export default {
   data() {
@@ -43,7 +50,8 @@ export default {
         event_time: '',
         location: ''
       },
-      userId: null // 从 localStorage 获取用户 ID
+      userId: null, // 从 localStorage 获取用户 ID
+      userMap: {}
     };
   },
   created() {
@@ -51,11 +59,23 @@ export default {
     this.loadTopics();
   },
   methods: {
+    goToProfile() {
+      this.$router.push('/profile');
+    },
+
     async loadTopics() {
       try {
         const res = await fetchTopics();
         this.topics = res.data.topics;
-        console.log(this.topics[0]);
+
+        const userIDs = new Set();
+        this.topics.forEach(topic => {
+
+          topic.Participants.forEach(p => userIDs.add(p.UserID));
+        });
+
+        await Promise.all([...userIDs].map(id => this.getName(id)));
+        console.log(this.userMap);
       } catch (e) {
         console.error('Failed to load topics:', e);
       }
@@ -81,6 +101,11 @@ export default {
       } catch (e) {
         alert('Join failed: ' + (e.response?.data?.error || 'Unknown error'));
       }
+    },
+    async getName(userID) {
+      if (this.userMap[userID]) return;
+      const res = await getNameById(userID);
+      this.userMap[userID] = res.data.username;
     }
   }
 };
@@ -97,6 +122,13 @@ export default {
 .topic-card {
   padding: 20px;
 }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 
 .create-topic {
   grid-column: 1 / -1;

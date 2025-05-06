@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeComponent  from '../components/HomeComponent.vue'
 import TopicComponent from "@/components/TopicComponent.vue";
+import ProfileComponent from "@/components/ProfileComponent.vue";
 
 const routes = [
     {
@@ -12,6 +13,10 @@ const routes = [
         path:'/topics',
         name:'Topic page',
         component: TopicComponent,
+    },
+    {
+        path:'/profile',
+        component: ProfileComponent
     }
 ];
 
