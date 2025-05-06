@@ -13,5 +13,9 @@ func SetupRoutes(r *gin.Engine) {
 		api.POST("/createTopic", controllers.CreateTopic)
 		api.POST("/joinTopic", controllers.JoinTopic)
 		api.GET("/getAllTopics", controllers.ListTopics)
+
+		api.POST("/getUserNameByID", controllers.GetNameByID)
+		api.POST("/getUserInfoByID", controllers.GetUserInfoByID)
+		api.POST("/uploadAvatar", controllers.UploadAvatar)
 	}
 }
