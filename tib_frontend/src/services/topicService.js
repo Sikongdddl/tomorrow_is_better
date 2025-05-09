@@ -28,3 +28,10 @@ export const joinTopic = (user_id, topic_id) =>
         topic_id: topic_id // 虽然在路径中已经传了，但后端你的逻辑要求也在 JSON 体中传一次
     });
 }
+
+export const leaveTopic = (user_id, topic_id) => {
+    return topicService.post('leaveTopic',{
+        user_id: user_id,
+        topic_id: topic_id
+    })
+}

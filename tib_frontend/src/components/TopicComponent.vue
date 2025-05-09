@@ -1,6 +1,7 @@
 <template>
   <div class="header">
-    <h1>欢迎！</h1>
+    <h1>下次一定！</h1>
+    <h4>内测中，非常需要大家的修改建议。敬请批评指正：sikongdddl@gmail.com</h4>
     <el-button type="primary" @click="goToProfile" style="float: right;">个人主页</el-button>
   </div>
   <div class="topics-container">
@@ -15,6 +16,7 @@
         {{participant.Role}}:   {{userMap[participant.UserID]}}
       </p>
       <el-button type="success" @click="join(topic.ID)">Join</el-button>
+      <el-button type="danger" @click="leave(topic.ID)">Leave</el-button>
     </el-card>
 
     <el-divider></el-divider>
@@ -38,7 +40,7 @@
 </template>
 
 <script>
-import { fetchTopics, createTopic, joinTopic } from '@/services/topicService';
+import { fetchTopics, createTopic, joinTopic, leaveTopic } from '@/services/topicService';
 import { getNameById} from "@/services/userService";
 
 export default {
@@ -100,6 +102,15 @@ export default {
         this.loadTopics();
       } catch (e) {
         alert('Join failed: ' + (e.response?.data?.error || 'Unknown error'));
+      }
+    },
+    async leave(topicId){
+      try{
+        await leaveTopic(this.userId, topicId);
+        alert('Leave successfully');
+        this.loadTopics();
+      } catch (e){
+        alert('Leave failed: '+ (e.response?.data?.error || 'Unknown error'));
       }
     },
     async getName(userID) {

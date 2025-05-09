@@ -48,3 +48,15 @@ export const uploadAvatar = (userID, file) => {
         },
     });
 }
+
+export const getParticipatedTopics = (userID) => {
+    return userService.post('/user/participated-topics', {
+        user_id: userID
+    })
+}
+
+export const getCreatedTopics = (userID) => {
+    return userService.post('user/created-topics',{
+        user_id: userID
+    })
+}

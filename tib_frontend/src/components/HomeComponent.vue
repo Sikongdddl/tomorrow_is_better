@@ -74,10 +74,12 @@ export default {
       try {
         const response = await register(this.form.username, this.form.password);
         console.log('Registration success:', response);
+        alert("注册成功！")
+        this.toggleForm()
         // 处理注册成功的逻辑，例如跳转到登录页面
       } catch (error) {
         console.error('Registration failed:', error);
-        alert('Registration failed: ' + (error.response?.data?.message || 'Unknown error'));
+        alert('注册失败！' + (error.response?.data?.message || 'Unknown error'));
       }
     },
 
