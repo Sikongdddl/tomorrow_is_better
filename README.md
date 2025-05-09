@@ -1,1 +1,1 @@
-backend of project Tomorrow_is_better
+Vue3 frontend for Tomorrow is better. 
