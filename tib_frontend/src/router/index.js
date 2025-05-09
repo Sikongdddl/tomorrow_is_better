@@ -20,10 +20,9 @@ const routes = [
         component: ProfileComponent
     },
     {
-        path:'/topic/:id',
-        name: 'TopicDetail',
+        path:'/topicDetail',
+        name: 'Topic Detail page',
         component: TopicDetailComponent,
-        props: true,
     }
 ];
 

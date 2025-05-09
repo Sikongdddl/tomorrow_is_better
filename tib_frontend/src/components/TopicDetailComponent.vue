@@ -53,11 +53,10 @@
 import {getTopicById} from "@/services/topicService";
 import { addComment, getComment, delComment} from "@/services/commentService";
 export default {
-  props:['id'],
   data() {
     return {
       topic: null,
-      topic_id: Number(this.id),
+      topic_id: parseInt(localStorage.getItem("topicId")),
       user_id : parseInt(localStorage.getItem("userId")),
       comments:[],
       newComment:{
@@ -68,6 +67,8 @@ export default {
   async created() {
     try {
       const res = await getTopicById(this.topic_id);
+      console.log(res)
+
       this.topic = res.data.message;
       await this.loadComments()
     } catch (e) {
@@ -79,7 +80,6 @@ export default {
       try {
         const commentRes = await getComment(this.topic_id);
         this.comments = commentRes.data.comments;
-        console.log(commentRes.data.comments);
       } catch (e) {
         console.error('Failed to load topics:', e);
       }

@@ -15,6 +15,7 @@
       <p v-for = "participant in topic.Participants" :key="participant.ID">
         {{participant.Role}}:   {{userMap[participant.UserID]}}
       </p>
+      <p>Id: {{topic.ID}}</p>
       <el-button type="primary" @click="goToTopicDetail(topic.ID)">查看详情</el-button>
       <el-button type="success" @click="join(topic.ID)">Join</el-button>
       <el-button type="danger" @click="leave(topic.ID)">Leave</el-button>
@@ -62,29 +63,6 @@ export default {
     this.loadTopics();
   },
   methods: {
-    goToProfile() {
-      this.$router.push('/profile');
-    },
-    goToTopicDetail(id){
-      this.$router.push({name: "TopicDetail", params: {id} });
-    },
-    async loadTopics() {
-      try {
-        const res = await fetchTopics();
-        this.topics = res.data.topics;
-
-        const userIDs = new Set();
-        this.topics.forEach(topic => {
-
-          topic.Participants.forEach(p => userIDs.add(p.UserID));
-        });
-
-        await Promise.all([...userIDs].map(id => this.getName(id)));
-        console.log(this.userMap);
-      } catch (e) {
-        console.error('Failed to load topics:', e);
-      }
-    },
     async create() {
       try {
         await createTopic({
@@ -96,10 +74,31 @@ export default {
         alert('Create failed: ' + (e.response?.data?.error || 'Unknown error'));
       }
     },
+    goToProfile() {
+      this.$router.push('/profile');
+    },
+    goToTopicDetail(topic_id){
+      localStorage.setItem('topicId', topic_id)
+      this.$router.push("TopicDetail");
+    },
+    async loadTopics() {
+      try {
+        const res = await fetchTopics();
+        this.topics = res.data.topics;
+        const userIDs = new Set();
+        this.topics.forEach(topic => {
+          topic.Participants.forEach(p => userIDs.add(p.UserID));
+        });
+
+        await Promise.all([...userIDs].map(id => this.getName(id)));
+      } catch (e) {
+        console.error('Failed to load topics:', e);
+      }
+    },
     async join(topicId) {
       try {
         console.log(topicId)
-        console.log(this.userId)
+        //console.log(this.userId)
         await joinTopic(this.userId,topicId);
         alert('Joined successfully');
         this.loadTopics();

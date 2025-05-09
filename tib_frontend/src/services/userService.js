@@ -1,7 +1,7 @@
 import axios from 'axios'; // 引入axios实例
 
-const baseURL = 'http://localhost:8080';
-
+//const baseURL = 'http://localhost:8080';
+const baseURL = 'http://58.196.157.31:23457';
 const userService = axios.create({
     baseURL,
     timeout: 10000,
