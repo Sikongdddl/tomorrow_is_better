@@ -8,7 +8,13 @@ const topicService = axios.create({
 })
 
 export const fetchTopics = () => {
-    return topicService.get('getAllTopics')
+    return topicService.get('getAllTopics');
+}
+
+export const getTopicById = (topic_id) => {
+    return topicService.post('getTopicById',{
+        topic_id: topic_id
+    });
 }
 
 export const createTopic = (topic) =>
@@ -33,5 +39,5 @@ export const leaveTopic = (user_id, topic_id) => {
     return topicService.post('leaveTopic',{
         user_id: user_id,
         topic_id: topic_id
-    })
+    });
 }

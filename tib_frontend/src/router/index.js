@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomeComponent  from '../components/HomeComponent.vue'
 import TopicComponent from "@/components/TopicComponent.vue";
 import ProfileComponent from "@/components/ProfileComponent.vue";
+import TopicDetailComponent from "@/components/TopicDetailComponent.vue";
 
 const routes = [
     {
@@ -17,6 +18,12 @@ const routes = [
     {
         path:'/profile',
         component: ProfileComponent
+    },
+    {
+        path:'/topic/:id',
+        name: 'TopicDetail',
+        component: TopicDetailComponent,
+        props: true,
     }
 ];
 

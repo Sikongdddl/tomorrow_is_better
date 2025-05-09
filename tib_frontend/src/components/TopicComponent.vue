@@ -15,6 +15,7 @@
       <p v-for = "participant in topic.Participants" :key="participant.ID">
         {{participant.Role}}:   {{userMap[participant.UserID]}}
       </p>
+      <el-button type="primary" @click="goToTopicDetail(topic.ID)">查看详情</el-button>
       <el-button type="success" @click="join(topic.ID)">Join</el-button>
       <el-button type="danger" @click="leave(topic.ID)">Leave</el-button>
     </el-card>
@@ -64,7 +65,9 @@ export default {
     goToProfile() {
       this.$router.push('/profile');
     },
-
+    goToTopicDetail(id){
+      this.$router.push({name: "TopicDetail", params: {id} });
+    },
     async loadTopics() {
       try {
         const res = await fetchTopics();
