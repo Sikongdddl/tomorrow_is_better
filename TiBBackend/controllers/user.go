@@ -185,3 +185,50 @@ func UploadAvatar(c *gin.Context) {
 		"avatar_url": avatarURL,
 	})
 }
+
+func GetParticipatedTopics(c *gin.Context) {
+	var req struct {
+		UserID uint `json:"user_id"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+		return
+	}
+
+	var participantEntries []models.TopicParticipant
+	if err := config.DB.Where("user_id = ?", req.UserID).Find(&participantEntries).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to query participation"})
+		return
+	}
+
+	var topicIDs []uint
+	for _, entry := range participantEntries {
+		topicIDs = append(topicIDs, entry.TopicID)
+	}
+
+	var topics []models.Topic
+	if err := config.DB.Where("id IN ?", topicIDs).Find(&topics).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get topics"})
+		return
+	}
+
+	c.JSON(http.StatusOK, topics)
+}
+
+func GetCreatedTopics(c *gin.Context) {
+	var req struct {
+		UserID uint `json:"user_id"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+		return
+	}
+
+	var topics []models.Topic
+	if err := config.DB.Where("creator_id = ?", req.UserID).Find(&topics).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get topics"})
+		return
+	}
+
+	c.JSON(http.StatusOK, topics)
+}
