@@ -5,7 +5,7 @@ import "time"
 type User struct {
 	ID                      uint   `gorm:"primaryKey"`
 	Username                string `gorm:"type:varchar(64);uniqueIndex;not null"`
-	PasswordHash            string `gorm:"type:varchar(255);not null"`
+	Password                string `gorm:"type:varchar(255);not null"`
 	AvatarURL               string
 	ViolationCount          int
 	SuccessParticipationCnt int
@@ -37,7 +37,7 @@ type Comment struct {
 	TopicID   uint   `gorm:"not null"`
 	Content   string `gorm:"type:text;not null"`
 	CreatedAt time.Time
-	
+
 	User  User  `gorm:"foreignKey:UserID"`
 	Topic Topic `gorm:"foreignKey:TopicID"`
 }

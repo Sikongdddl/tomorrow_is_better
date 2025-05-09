@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"gorm.io/gorm"
 	"net/http"
 	"time"
 
@@ -134,10 +135,26 @@ func ListTopics(c *gin.Context) {
 }
 
 func GetTopicById(c *gin.Context) {
-	var topic models.Topic
-	if err := config.DB.First(&topic, c.Param("topic_id")).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	var request struct {
+		TopicID int `json:"topic_id"` // 从请求体获取 topic_id
+	}
+
+	// 绑定请求体中的 JSON 数据
+	if err := c.ShouldBindJSON(&request); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
 		return
 	}
+
+	// 根据 topic_id 查询数据库
+	var topic models.Topic
+	if err := config.DB.First(&topic, request.TopicID).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Topic not found"})
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		}
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{"message": topic})
 }

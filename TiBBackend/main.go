@@ -12,14 +12,14 @@ func main() {
 	r := gin.Default()
 
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:8081"},                   // 允许的源（前端的域名或端口）
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}, // 允许的请求方法
-		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"}, // 允许的请求头
-		AllowCredentials: true,                                                // 是否允许携带凭证（如 cookies）
+		AllowOrigins:     []string{"http://localhost:8081", "http://localhost:80", "http://58.196.157.31:23456"}, // 允许的源（前端的域名或端口）
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},                                    // 允许的请求方法
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},                                    // 允许的请求头
+		AllowCredentials: true,                                                                                   // 是否允许携带凭证（如 cookies）
 	}))
 
 	r.Static("/static/avatars", "./uploads/avatars")
 	routes.SetupRoutes(r)
 
-	r.Run(":8080") // listen and serve on localhost:8080
+	r.Run("0.0.0.0:8080") // listen and serve on localhost:8080
 }

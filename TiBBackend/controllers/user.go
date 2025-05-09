@@ -12,7 +12,6 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/bcrypt"
 )
 
 func RegisterUser(c *gin.Context) {
@@ -26,11 +25,9 @@ func RegisterUser(c *gin.Context) {
 		return
 	}
 
-	hash, _ := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
-
 	user := models.User{
-		Username:     req.Username,
-		PasswordHash: string(hash),
+		Username: req.Username,
+		Password: req.Password,
 	}
 
 	if err := config.DB.Create(&user).Error; err != nil {
@@ -64,7 +61,7 @@ func LoginUser(c *gin.Context) {
 		return
 	}
 
-	if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(req.Password)); err != nil {
+	if err := strings.Compare(user.Password, req.Password); err != 0 {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Incorrect password"})
 		return
 	}
