@@ -130,6 +130,14 @@ func ListTopics(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-
 	c.JSON(http.StatusOK, gin.H{"topics": topics})
+}
+
+func GetTopicById(c *gin.Context) {
+	var topic models.Topic
+	if err := config.DB.First(&topic, c.Param("topic_id")).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": topic})
 }

@@ -13,6 +13,7 @@ func SetupRoutes(r *gin.Engine) {
 		api.POST("/createTopic", controllers.CreateTopic)
 		api.POST("/joinTopic", controllers.JoinTopic)
 		api.GET("/getAllTopics", controllers.ListTopics)
+		api.POST("/getTopicById", controllers.GetTopicById)
 
 		api.POST("/getUserNameByID", controllers.GetNameByID)
 		api.POST("/getUserInfoByID", controllers.GetUserInfoByID)
@@ -21,5 +22,10 @@ func SetupRoutes(r *gin.Engine) {
 
 		api.POST("/user/participated-topics", controllers.GetParticipatedTopics)
 		api.POST("/user/created-topics", controllers.GetCreatedTopics)
+
+		api.POST("/comment/list", controllers.GetCommentsByTopic)
+		api.POST("/comment/add", controllers.AddComment)
+		api.POST("/comment/delete", controllers.DeleteComment)
+
 	}
 }

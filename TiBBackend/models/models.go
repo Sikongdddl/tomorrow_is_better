@@ -30,3 +30,14 @@ type TopicParticipant struct {
 	Role     string `gorm:"type:enum('creator','participant','past_participant')"`
 	JoinedAt time.Time
 }
+
+type Comment struct {
+	ID        uint   `gorm:"primaryKey"`
+	UserID    uint   `gorm:"not null"`
+	TopicID   uint   `gorm:"not null"`
+	Content   string `gorm:"type:text;not null"`
+	CreatedAt time.Time
+	
+	User  User  `gorm:"foreignKey:UserID"`
+	Topic Topic `gorm:"foreignKey:TopicID"`
+}
